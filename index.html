@@ -309,8 +309,16 @@ const SECTIONS = [
     intro: 'Queremos saber qué te duele más para resolverlo primero.',
     questions: [
       { id: 'pain_ratings', type: 'matrix', ends: SCALE_LABELS_PAIN,
-        label: '¿Cuánto te afecta cada uno de estos problemas?', hint: '1 = nada, 5 = muchísimo.',
-        items: [['daily_closing','Hacer el cierre del día a mano'],['reports_profit','Saber cuánto gané y sacar reportes'],['assignment','Repartir las remesas entre operadores'],['client_typos','Clientes que escriben mal los datos de destino'],['unpayable','Remesas que no se pueden pagar por datos inválidos'],['many_accounts','Demasiadas cuentas y métodos de pago'],['who_did_what','Saber quién hizo qué y cuándo']] },
+        label: '¿Cuánto te afectan estas situaciones en tu día a día?', hint: '1 = no me pasa o no me afecta, 5 = me afecta muchísimo.',
+        items: [
+          ['payment_checks','Confirmar que el pago de cada cliente realmente llegó te quita mucho tiempo o te genera dudas.'],
+          ['assignment','Tienes que repartir cada remesa a mano entre tus operadores y estar pendiente de quién tiene saldo para pagarla.'],
+          ['invalid_data','Un cliente manda mal los datos del destino, la remesa se traba y tienes que perseguirlo para que los corrija.'],
+          ['many_accounts','Manejas tantas cuentas y métodos de pago que te cuesta saber cuánto hay en cada una.'],
+          ['daily_closing','Al final del día pasas mucho tiempo cuadrando cuentas y operadores a mano, y a veces los números no cuadran.'],
+          ['reports_profit','No sabes con certeza cuánto ganaste en el día o en el mes, ni con qué ruta u operador ganas más.'],
+          ['who_did_what','Cuando algo sale mal, no puedes saber con certeza quién lo hizo ni cuándo.']
+        ] },
       { id: 'invalid_data_rate', type: 'single', cols: true,
         label: 'De cada 100 remesas, ¿cuántas llegan con datos de destino mal escritos o inválidos?',
         options: [['0','Ninguna'],['1_2','1 o 2'],['3_5','3 a 5'],['6_10','6 a 10'],['gt10','Más de 10']] },
@@ -377,16 +385,12 @@ const SECTIONS = [
       { id: 'willingness_to_pay', type: 'single', cols: true,
         label: 'Si el sistema te resolviera los problemas que marcaste, ¿cuánto pagarías al mes?',
         options: [['wouldnt_pay','No pagaría'],['lt20','Menos de US$20'],['20_39','US$20 a 39'],['40_79','US$40 a 79'],['80_149','US$80 a 149'],['150plus','US$150 o más']] },
-      { id: 'subscription_payment_methods', type: 'multi', cols: true, other: true,
+      { id: 'subscription_payment_methods', type: 'multi',
         label: '¿Cómo preferirías pagar la suscripción?', hint: 'Marca todas las que te sirvan.',
-        options: [['usdt','USDT'],['zelle','Zelle'],['paypal','PayPal'],['zinli','Zinli'],['bank_transfer','Transferencia bancaria'],['card','Tarjeta de crédito o débito']] },
-      { id: 'branding_extra', type: 'single',
-        label: '¿Pagarías algo extra para que tus clientes vean tu logo, tus colores y tu nombre en lugar del nuestro?',
-        options: [['yes','Sí'],['maybe','Tal vez'],['no','No']] },
-      { id: 'branding_extra_amount', type: 'single', cols: true,
-        showIf: a => a.branding_extra === 'yes' || a.branding_extra === 'maybe',
-        label: '¿Cuánto extra al mes te parecería razonable?',
-        options: [['lt10','Menos de US$10'],['10_19','US$10 a 19'],['20_39','US$20 a 39'],['40plus','US$40 o más']] }
+        options: [['usdt','USDT'],['bank_transfer_local','Transferencia bancaria en alguno de los países donde trabajo']] },
+      { id: 'branding_interest', type: 'single',
+        label: '¿Te gustaría que tus clientes vean tu logo, tus colores y el nombre de tu negocio en la página donde cotizan y siguen sus envíos?',
+        options: [['yes_a_lot','Sí, me interesa mucho'],['yes_some','Sí, algo'],['indifferent','Me da igual'],['no','No']] }
     ]
   },
   {
