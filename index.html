@@ -151,7 +151,7 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,textarea:fo
 <div class="wrap">
   <header class="top">
     <div class="logo" aria-hidden="true">R</div>
-    <div class="brand">Remsa<small>Encuesta para remeseros</small></div>
+    <div class="brand">Encuesta<small>para remeseros</small></div>
   </header>
 
   <div class="progress" id="progress" hidden>
@@ -163,12 +163,11 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,textarea:fo
     <!-- Bienvenida -->
     <section class="view card" id="view-welcome" aria-labelledby="welcome-title">
       <h1 id="welcome-title">Ayúdanos a crear la herramienta que tu negocio de remesas necesita</h1>
-      <p class="lead">Estamos construyendo <b>Remsa</b>, un sistema para que los remeseros manejen cotizaciones, verificación de pagos, reparto a sus operadores, cierre del día y ganancias en un solo lugar. Queremos saber cómo trabajas hoy para hacerlo bien desde el principio.</p>
+      <p class="lead">Estamos construyendo <b>un sistema</b> para que los remeseros manejen cotizaciones, verificación de pagos, reparto a sus operadores, cierre del día y ganancias en un solo lugar. Queremos saber cómo trabajas hoy para hacerlo bien desde el principio.</p>
       <ul class="facts">
         <li><span class="ic" aria-hidden="true">⏱</span><div><b>Entre 8 y 10 minutos</b><span class="t">Casi todo se responde con un toque.</span></div></li>
-        <li><span class="ic" aria-hidden="true">🔒</span><div><b>Es anónima</b><span class="t">No pedimos tu nombre ni el de tu negocio. Al final puedes dejar un contacto solo si quieres probar Remsa.</span></div></li>
+        <li><span class="ic" aria-hidden="true">🔒</span><div><b>Es anónima</b><span class="t">No pedimos tu nombre ni el de tu negocio. Al final puedes dejar un contacto solo si quieres probar el sistema.</span></div></li>
         <li><span class="ic" aria-hidden="true">💾</span><div><b>Se guarda tu avance</b><span class="t">Si cierras la página, puedes seguir donde te quedaste en este mismo teléfono.</span></div></li>
-        <li><span class="ic" aria-hidden="true">💵</span><div><b>Remsa no toca tu dinero</b><span class="t">Es un software por suscripción; el dinero siempre se mueve en tus cuentas y las de tus operadores.</span></div></li>
       </ul>
       <button type="button" class="btn btn-primary btn-block" id="btn-start">Empezar</button>
       <p class="small" id="resume-note" hidden>Tienes respuestas guardadas: seguirás donde te quedaste.</p>
@@ -207,7 +206,7 @@ const CONFIG = {
   SUPABASE_ANON_KEY: '',   // clave pública anon (solo inserción vía RLS)
   TABLE: 'survey_responses'
 };
-const STORAGE_KEY = 'remsa_encuesta_v' + CONFIG.SURVEY_VERSION;
+const STORAGE_KEY = 'encuesta_remeseros_v' + CONFIG.SURVEY_VERSION;
 const REQUEST_TIMEOUT_MS = 15000;
 
 /* ===== Opciones reutilizables ===== */
@@ -345,7 +344,7 @@ const SECTIONS = [
   },
   {
     id: 'interest', title: 'Lo que te serviría',
-    intro: 'Estas son ideas para Remsa. Dinos cuánto te servirían.',
+    intro: 'Estas son ideas para el sistema. Dinos cuánto te servirían.',
     questions: [
       { id: 'feature_interest', type: 'matrix', ends: SCALE_LABELS_INTEREST,
         label: '¿Cuánto te interesa cada función?', hint: '1 = no me interesa, 5 = lo necesito.',
@@ -363,16 +362,16 @@ const SECTIONS = [
   },
   {
     id: 'pricing', title: 'Precio',
-    intro: 'Remsa se pagaría con una suscripción mensual, nunca con un porcentaje de tus envíos.',
+    intro: 'El sistema se pagaría con una suscripción mensual, nunca con un porcentaje de tus envíos.',
     questions: [
       { id: 'willingness_to_pay', type: 'single', cols: true,
-        label: 'Si Remsa te resolviera los problemas que marcaste, ¿cuánto pagarías al mes?',
+        label: 'Si el sistema te resolviera los problemas que marcaste, ¿cuánto pagarías al mes?',
         options: [['wouldnt_pay','No pagaría'],['lt20','Menos de US$20'],['20_39','US$20 a 39'],['40_79','US$40 a 79'],['80_149','US$80 a 149'],['150plus','US$150 o más']] },
       { id: 'subscription_payment_methods', type: 'multi', cols: true, other: true,
         label: '¿Cómo preferirías pagar la suscripción?', hint: 'Marca todas las que te sirvan.',
         options: [['usdt','USDT'],['zelle','Zelle'],['paypal','PayPal'],['zinli','Zinli'],['bank_transfer','Transferencia bancaria'],['card','Tarjeta de crédito o débito']] },
       { id: 'branding_extra', type: 'single',
-        label: '¿Pagarías algo extra para que tus clientes vean tu logo, tus colores y tu nombre en lugar del de Remsa?',
+        label: '¿Pagarías algo extra para que tus clientes vean tu logo, tus colores y tu nombre en lugar del nuestro?',
         options: [['yes','Sí'],['maybe','Tal vez'],['no','No']] },
       { id: 'branding_extra_amount', type: 'single', cols: true,
         showIf: a => a.branding_extra === 'yes' || a.branding_extra === 'maybe',
@@ -387,7 +386,7 @@ const SECTIONS = [
       { id: 'comments', type: 'textarea', optional: true, max: 1000,
         label: '¿Algo más que quieras contarnos?', hint: 'Ideas, problemas, lo que sea.' },
       { id: 'wants_contact', type: 'single', optional: true,
-        label: '¿Te gustaría probar Remsa antes que nadie o conversar 15 minutos con nosotros?',
+        label: '¿Te gustaría probar el sistema antes que nadie o conversar 15 minutos con nosotros?',
         options: [['yes','Sí, me interesa'],['no','No, gracias']] },
       { id: 'contact', type: 'text', optional: true, max: 120, inputmode: 'email',
         showIf: a => a.wants_contact === 'yes',
@@ -743,7 +742,7 @@ async function submit(btn) {
   lastPayload = buildPayload();
 
   if (!isConfigured()) {
-    console.warn('[Encuesta Remsa] CONFIG.SUPABASE_URL / SUPABASE_ANON_KEY vacíos: la respuesta no se envió. Se ofrece descarga en JSON.', lastPayload);
+    console.warn('[Encuesta] CONFIG.SUPABASE_URL / SUPABASE_ANON_KEY vacíos: la respuesta no se envió. Se ofrece descarga en JSON.', lastPayload);
     finish(true);
     return;
   }
@@ -755,7 +754,7 @@ async function submit(btn) {
     await sendPayload(lastPayload);
     finish(false);
   } catch (e) {
-    console.error('[Encuesta Remsa] Error al enviar:', e);
+    console.error('[Encuesta] Error al enviar:', e);
     btn.disabled = false;
     btn.textContent = 'Enviar respuestas';
     const box = el('div', { class: 'notice err-box', role: 'alert' }, [
@@ -775,7 +774,7 @@ function downloadJSON() {
   const data = lastPayload || buildPayload();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = el('a', { href: url, download: 'encuesta-remsa-respuestas.json' });
+  const a = el('a', { href: url, download: 'encuesta-respuestas.json' });
   document.body.appendChild(a);
   a.click();
   a.remove();

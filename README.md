@@ -1,4 +1,4 @@
-# Encuesta para remeseros — Remsa
+# Encuesta para remeseros
 
 Encuesta anónima de validación de producto. Página estática publicada con GitHub Pages: https://remsas.github.io/encuesta/
 
