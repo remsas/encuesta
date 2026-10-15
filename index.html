@@ -120,7 +120,14 @@ input[type=text],input[type=email],input[type=tel],textarea{
 }
 textarea{min-height:110px;resize:vertical}
 input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,textarea:focus{outline:3px solid var(--focus);outline-offset:1px;border-color:var(--primary)}
-.other-input{margin-top:8px}
+.other-list{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+.other-row{display:flex;gap:8px;align-items:center}
+.other-row input{flex:1}
+.other-remove{flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid var(--border);background:var(--option);color:var(--muted);font:inherit;font-size:20px;line-height:1;cursor:pointer}
+.other-remove:hover,.other-remove:focus-visible{color:var(--error);border-color:var(--error)}
+.other-add{align-self:flex-start;border:1.5px dashed var(--border);background:transparent;color:var(--primary);font:inherit;font-weight:600;font-size:15px;border-radius:12px;padding:10px 14px;min-height:44px;cursor:pointer}
+.other-add:hover,.other-add:focus-visible{border-color:var(--primary)}
+.other-add[hidden]{display:none}
 .count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
 
 .err{display:none;margin-top:8px;color:var(--error);background:var(--error-soft);border-radius:10px;padding:8px 12px;font-size:14px;font-weight:600}
@@ -215,7 +222,7 @@ const SCALE_LABELS_INTEREST = ['No me interesa', 'Lo necesito'];
 
 /* ===== Definición de la encuesta =====
    Tipos: single, multi, scale, matrix, text, textarea.
-   other: true agrega "Otro" con texto (se guarda en <id>_other).
+   other: true agrega "Otro" con uno o varios textos (se guardan como lista en <id>_other).
    exclusive: códigos que, al marcarse, desmarcan los demás (multi).
    showIf: función sobre las respuestas; si devuelve false, la pregunta se oculta y no se envía. */
 const SECTIONS = [
@@ -426,6 +433,43 @@ function clearLocal() {
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignorar */ }
 }
 
+/* ===== "Otro" con varios textos ===== */
+const OTHER_MAX_ITEMS = 5;
+function otherItems(qid) {
+  const v = answers[qid + '_other'];
+  if (Array.isArray(v)) return v.length ? v : [''];
+  if (typeof v === 'string') return [v]; // datos guardados por la versión anterior
+  return [''];
+}
+function otherFilled(qid) {
+  return otherItems(qid).map(t => (t || '').trim()).filter(Boolean);
+}
+function renderOtherList(q, focusIndex) {
+  const list = document.getElementById('in-' + q.id + '-other');
+  if (!list) return;
+  const items = otherItems(q.id);
+  answers[q.id + '_other'] = items.slice();
+  list.innerHTML = '';
+  items.forEach((text, i) => {
+    const input = el('input', { type: 'text', 'data-other-for': q.id, 'data-idx': String(i), maxlength: '120',
+      placeholder: i === 0 ? '¿Cuál?' : '¿Cuál más?', 'aria-label': 'Otro, opción ' + (i + 1) });
+    input.value = text || '';
+    const row = el('div', { class: 'other-row' }, [input]);
+    if (items.length > 1) {
+      row.appendChild(el('button', { type: 'button', class: 'other-remove', 'data-other-remove': q.id, 'data-idx': String(i),
+        'aria-label': 'Quitar otro ' + (i + 1), text: '×' }));
+    }
+    list.appendChild(row);
+  });
+  const add = el('button', { type: 'button', class: 'other-add', 'data-other-add': q.id, text: '+ Agregar otro' });
+  add.hidden = items.length >= OTHER_MAX_ITEMS;
+  list.appendChild(add);
+  if (typeof focusIndex === 'number') {
+    const f = list.querySelector('input[data-idx="' + focusIndex + '"]');
+    if (f) f.focus();
+  }
+}
+
 /* ===== Renderizado ===== */
 function el(tag, attrs = {}, children = []) {
   const n = document.createElement(tag);
@@ -477,9 +521,7 @@ function renderQuestion(q, num) {
     }
     wrap.appendChild(box);
     if (q.other) {
-      const oi = el('input', { type: 'text', class: 'other-input', id: 'in-' + q.id + '-other', 'data-other-for': q.id, maxlength: '120', placeholder: '¿Cuál?', 'aria-label': 'Especifica otro' });
-      oi.value = answers[q.id + '_other'] || '';
-      wrap.appendChild(oi);
+      wrap.appendChild(el('div', { class: 'other-list', id: 'in-' + q.id + '-other' }));
     }
   } else if (q.type === 'matrix') {
     const cur = answers[q.id] || {};
@@ -555,8 +597,11 @@ function updateVisibility() {
 function readInput(target) {
   // Texto "Otro"
   if (target.dataset.otherFor) {
-    answers[target.dataset.otherFor + '_other'] = target.value;
-    return target.dataset.otherFor;
+    const qid = target.dataset.otherFor;
+    const items = otherItems(qid).slice();
+    items[parseInt(target.dataset.idx, 10) || 0] = target.value;
+    answers[qid + '_other'] = items;
+    return qid;
   }
   const name = target.name;
   if (!name || name === 'website') return null;
@@ -609,7 +654,7 @@ function questionError(q) {
   }
   if (q.other) {
     const on = q.type === 'single' ? v === 'other' : Array.isArray(v) && v.includes('other');
-    if (on && !(answers[q.id + '_other'] || '').trim()) return 'Cuéntanos cuál es la opción "Otro".';
+    if (on && otherFilled(q.id).length === 0) return 'Cuéntanos cuál es la opción "Otro".';
   }
   return '';
 }
@@ -687,8 +732,8 @@ function buildPayload() {
     }
     if (q.other) {
       const on = q.type === 'single' ? v === 'other' : Array.isArray(v) && v.includes('other');
-      const t = (answers[q.id + '_other'] || '').trim();
-      if (on && t) out[q.id + '_other'] = t.slice(0, 120);
+      const list = otherFilled(q.id).map(t => t.slice(0, 120)).slice(0, OTHER_MAX_ITEMS);
+      if (on && list.length) out[q.id + '_other'] = list;
     }
   }
   return { survey_version: CONFIG.SURVEY_VERSION, answers: out };
@@ -785,6 +830,7 @@ function downloadJSON() {
 function init() {
   const resumed = loadLocal();
   renderSteps();
+  allQuestions().filter(q => q.other).forEach(q => renderOtherList(q));
   updateVisibility();
   if (resumed) {
     $('#resume-note').hidden = false;
@@ -808,6 +854,17 @@ function init() {
   form.addEventListener('submit', e => e.preventDefault());
   form.addEventListener('keydown', e => {
     // Enter en un campo de texto de una línea avanza de paso
+    if (e.key === 'Enter' && e.target.dataset.otherFor) {
+      e.preventDefault();
+      const q = findQuestion(e.target.dataset.otherFor);
+      const items = otherItems(q.id);
+      if (e.target.value.trim() && items.length < OTHER_MAX_ITEMS) {
+        answers[q.id + '_other'] = items.concat(['']);
+        renderOtherList(q, items.length);
+        saveLocal();
+      }
+      return;
+    }
     if (e.key === 'Enter' && e.target.matches('input[type=text]')) {
       e.preventDefault();
       const btn = document.querySelector('[data-step="' + step + '"] [data-action="next"],[data-step="' + step + '"] [data-action="submit"]');
@@ -815,6 +872,26 @@ function init() {
     }
   });
   form.addEventListener('click', e => {
+    const addBtn = e.target.closest('button[data-other-add]');
+    if (addBtn) {
+      const q = findQuestion(addBtn.dataset.otherAdd);
+      const items = otherItems(q.id);
+      if (items.length < OTHER_MAX_ITEMS) { answers[q.id + '_other'] = items.concat(['']); renderOtherList(q, items.length); saveLocal(); }
+      return;
+    }
+    const remBtn = e.target.closest('button[data-other-remove]');
+    if (remBtn) {
+      const q = findQuestion(remBtn.dataset.otherRemove);
+      const items = otherItems(q.id).slice();
+      const i = parseInt(remBtn.dataset.idx, 10) || 0;
+      items.splice(i, 1);
+      answers[q.id + '_other'] = items.length ? items : [''];
+      renderOtherList(q, Math.max(0, i - 1));
+      const node = document.getElementById('q-' + q.id);
+      if (node && node.classList.contains('invalid')) showQuestionError(q, questionError(q));
+      saveLocal();
+      return;
+    }
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;
     const a = btn.dataset.action;
