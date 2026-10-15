@@ -385,7 +385,7 @@ const SECTIONS = [
       { id: 'willingness_to_pay', type: 'single', cols: true,
         label: 'Si el sistema te resolviera los problemas que marcaste, ¿cuánto pagarías al mes?',
         options: [['wouldnt_pay','No pagaría'],['lt20','Menos de US$20'],['20_39','US$20 a 39'],['40_79','US$40 a 79'],['80_149','US$80 a 149'],['150plus','US$150 o más']] },
-      { id: 'subscription_payment_methods', type: 'multi',
+      { id: 'subscription_payment_methods', type: 'multi', other: true,
         label: '¿Cómo preferirías pagar la suscripción?', hint: 'Marca todas las que te sirvan.',
         options: [['usdt','USDT'],['bank_transfer_local','Transferencia bancaria en alguno de los países donde trabajo']] },
       { id: 'branding_interest', type: 'single',
