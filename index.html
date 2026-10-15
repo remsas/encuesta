@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Encuesta para remeseros</title>
+<meta name="description" content="Encuesta anónima de 8 a 10 minutos para remeseros: ayúdanos a construir una herramienta que facilite tu trabajo diario.">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f766e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1416" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6f6;
+  --bg-accent:#e3f1ef;
+  --card:#ffffff;
+  --text:#14201f;
+  --muted:#55625f;
+  --border:#d5dfdd;
+  --primary:#0f766e;
+  --primary-strong:#0b5d57;
+  --primary-soft:#e2f3f0;
+  --on-primary:#ffffff;
+  --option:#f7faf9;
+  --option-hover:#eef5f3;
+  --error:#b42318;
+  --error-soft:#fdecea;
+  --focus:#2563eb;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.06);
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b1416;
+    --bg-accent:#0f1f1f;
+    --card:#132022;
+    --text:#e8f0ee;
+    --muted:#a2b2ae;
+    --border:#2a3a3b;
+    --primary:#2dd4bf;
+    --primary-strong:#5eead4;
+    --primary-soft:#123634;
+    --on-primary:#062523;
+    --option:#182729;
+    --option-hover:#1d3032;
+    --error:#fda29b;
+    --error-soft:#3a1715;
+    --focus:#93c5fd;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;line-height:1.5;color:var(--text);
+  background:var(--bg);
+  background-image:radial-gradient(circle at 15% -10%,var(--bg-accent) 0,transparent 55%);
+  background-attachment:fixed;
+}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px calc(24px + env(safe-area-inset-bottom))}
+header.top{display:flex;align-items:center;gap:10px;padding:8px 2px 14px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:800;font-size:18px}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.01em}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:0}
+.progress{margin:0 0 14px}
+.progress-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.bar{height:8px;border-radius:99px;background:var(--border);overflow:hidden}
+.bar>span{display:block;height:100%;width:0;background:var(--primary);border-radius:99px;transition:width .35s ease}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 18px}
+@media (min-width:560px){.card{padding:30px 30px}}
+h1{font-size:26px;line-height:1.2;margin:0 0 10px;letter-spacing:-.02em}
+h2{font-size:21px;line-height:1.25;margin:0 0 4px;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0 0 18px}
+.step-intro{color:var(--muted);margin:0 0 20px;font-size:15px}
+.facts{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:10px}
+.facts li{display:flex;gap:12px;align-items:flex-start;background:var(--option);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.facts .ic{flex:none;width:28px;height:28px;border-radius:8px;background:var(--primary-soft);color:var(--primary-strong);display:grid;place-items:center;font-weight:800;font-size:14px}
+.facts b{display:block}
+.facts span.t{color:var(--muted);font-size:14px}
+
+fieldset.q,div.q{border:0;margin:0 0 26px;padding:0;min-width:0}
+.q[hidden]{display:none}
+.q legend,.q .qlabel{display:block;font-weight:700;font-size:16.5px;margin:0 0 4px;padding:0;line-height:1.35}
+.q .hint{font-size:14px;color:var(--muted);margin:0 0 10px}
+.q .opt-tag{font-weight:500;color:var(--muted);font-size:13px;margin-left:4px}
+.q .num{color:var(--primary-strong);margin-right:6px}
+.options{display:grid;gap:8px;margin-top:10px}
+.options.cols{grid-template-columns:1fr 1fr}
+@media (max-width:380px){.options.cols{grid-template-columns:1fr}}
+.opt{position:relative;display:flex;align-items:center;gap:12px;min-height:50px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--option);cursor:pointer;transition:border-color .15s,background .15s;user-select:none;-webkit-tap-highlight-color:transparent}
+.opt:hover{background:var(--option-hover)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.opt .mark{flex:none;width:22px;height:22px;border:2px solid var(--muted);display:grid;place-items:center;transition:all .15s}
+.opt input[type=radio]+.mark{border-radius:50%}
+.opt input[type=checkbox]+.mark{border-radius:6px}
+.opt input:checked+.mark{border-color:var(--primary);background:var(--primary)}
+.opt input[type=radio]:checked+.mark::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--on-primary)}
+.opt input[type=checkbox]:checked+.mark::after{content:"";width:6px;height:11px;border:solid var(--on-primary);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.opt:has(input:checked){border-color:var(--primary);background:var(--primary-soft)}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.opt .ol{font-size:15.5px;line-height:1.3}
+
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.scale .opt{justify-content:center;padding:0;min-height:48px;font-weight:700;font-size:17px}
+.scale .opt .mark{display:none}
+.scale-ends{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:5px}
+.matrix-item{padding:14px 0;border-top:1px solid var(--border)}
+.matrix-item:first-of-type{border-top:0;padding-top:6px}
+.matrix-item .mlabel{font-weight:600;font-size:15px;margin:0}
+.matrix-item.invalid .mlabel{color:var(--error)}
+
+input[type=text],input[type=email],input[type=tel],textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--text);background:var(--option);
+  border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;min-height:50px;
+}
+textarea{min-height:110px;resize:vertical}
+input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,textarea:focus{outline:3px solid var(--focus);outline-offset:1px;border-color:var(--primary)}
+.other-input{margin-top:8px}
+.count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+
+.err{display:none;margin-top:8px;color:var(--error);background:var(--error-soft);border-radius:10px;padding:8px 12px;font-size:14px;font-weight:600}
+.q.invalid .err{display:block}
+.q.invalid .opt{border-color:color-mix(in srgb,var(--error) 45%,var(--border))}
+
+.nav{display:flex;gap:10px;margin-top:8px}
+.btn{appearance:none;border:0;font:inherit;font-weight:700;font-size:16px;min-height:52px;padding:0 22px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.btn-primary{background:var(--primary);color:var(--on-primary);flex:1}
+.btn-primary:hover{background:var(--primary-strong)}
+.btn-primary[disabled]{opacity:.6;cursor:progress}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--option-hover)}
+.btn-block{width:100%}
+.step-error{display:none;margin:0 0 14px;color:var(--error);background:var(--error-soft);border-radius:12px;padding:12px 14px;font-weight:600;font-size:14.5px}
+.step-error.show{display:block}
+.notice{margin:16px 0 0;padding:12px 14px;border-radius:12px;background:var(--option);border:1px solid var(--border);font-size:14px;color:var(--muted)}
+.notice.err-box{background:var(--error-soft);border-color:transparent;color:var(--error);font-weight:600}
+.small{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+.hp{position:absolute!important;left:-10000px!important;top:auto;width:1px;height:1px;overflow:hidden}
+.big-ok{width:64px;height:64px;border-radius:50%;background:var(--primary-soft);color:var(--primary-strong);display:grid;place-items:center;font-size:32px;font-weight:800;margin:0 0 16px}
+.view[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo" aria-hidden="true">R</div>
+    <div class="brand">Remsa<small>Encuesta para remeseros</small></div>
+  </header>
+
+  <div class="progress" id="progress" hidden>
+    <div class="progress-meta"><span id="progress-label">Paso 1 de 8</span><span id="progress-title"></span></div>
+    <div class="bar" role="progressbar" aria-label="Avance de la encuesta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-fill"></span></div>
+  </div>
+
+  <main>
+    <!-- Bienvenida -->
+    <section class="view card" id="view-welcome" aria-labelledby="welcome-title">
+      <h1 id="welcome-title">Ayúdanos a crear la herramienta que tu negocio de remesas necesita</h1>
+      <p class="lead">Estamos construyendo <b>Remsa</b>, un sistema para que los remeseros manejen cotizaciones, verificación de pagos, reparto a sus operadores, cierre del día y ganancias en un solo lugar. Queremos saber cómo trabajas hoy para hacerlo bien desde el principio.</p>
+      <ul class="facts">
+        <li><span class="ic" aria-hidden="true">⏱</span><div><b>Entre 8 y 10 minutos</b><span class="t">Casi todo se responde con un toque.</span></div></li>
+        <li><span class="ic" aria-hidden="true">🔒</span><div><b>Es anónima</b><span class="t">No pedimos tu nombre ni el de tu negocio. Al final puedes dejar un contacto solo si quieres probar Remsa.</span></div></li>
+        <li><span class="ic" aria-hidden="true">💾</span><div><b>Se guarda tu avance</b><span class="t">Si cierras la página, puedes seguir donde te quedaste en este mismo teléfono.</span></div></li>
+        <li><span class="ic" aria-hidden="true">💵</span><div><b>Remsa no toca tu dinero</b><span class="t">Es un software por suscripción; el dinero siempre se mueve en tus cuentas y las de tus operadores.</span></div></li>
+      </ul>
+      <button type="button" class="btn btn-primary btn-block" id="btn-start">Empezar</button>
+      <p class="small" id="resume-note" hidden>Tienes respuestas guardadas: seguirás donde te quedaste.</p>
+    </section>
+
+    <!-- Encuesta -->
+    <form class="view" id="survey" novalidate hidden autocomplete="off">
+      <div class="hp" aria-hidden="true">
+        <label for="hp-website">No llenes este campo</label>
+        <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <div id="steps"></div>
+    </form>
+
+    <!-- Gracias -->
+    <section class="view card" id="view-thanks" hidden aria-labelledby="thanks-title" tabindex="-1">
+      <div class="big-ok" aria-hidden="true">✓</div>
+      <h1 id="thanks-title">¡Gracias por tu tiempo!</h1>
+      <p class="lead">Tus respuestas nos ayudan a construir una herramienta pensada para remeseros de verdad. Si dejaste un contacto, te escribiremos cuando tengamos algo para probar.</p>
+      <div id="offline-box" hidden>
+        <p class="notice">Esta encuesta todavía no está conectada a un servidor, así que tus respuestas no se enviaron. Puedes descargarlas y enviárnoslas directamente.</p>
+        <button type="button" class="btn btn-ghost btn-block" id="btn-download" style="margin-top:12px">Descargar mis respuestas (JSON)</button>
+      </div>
+      <p class="small">Puedes compartir esta encuesta con otros remeseros que conozcas.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+'use strict';
+
+/* ===== Configuración ===== */
+const CONFIG = {
+  SURVEY_VERSION: '1',
+  SUPABASE_URL: '',        // p. ej. https://xxxx.supabase.co
+  SUPABASE_ANON_KEY: '',   // clave pública anon (solo inserción vía RLS)
+  TABLE: 'survey_responses'
+};
+const STORAGE_KEY = 'remsa_encuesta_v' + CONFIG.SURVEY_VERSION;
+const REQUEST_TIMEOUT_MS = 15000;
+
+/* ===== Opciones reutilizables ===== */
+const SCALE_LABELS_PAIN = ['Nada', 'Mucho'];
+const SCALE_LABELS_INTEREST = ['No me interesa', 'Lo necesito'];
+
+/* ===== Definición de la encuesta =====
+   Tipos: single, multi, scale, matrix, text, textarea.
+   other: true agrega "Otro" con texto (se guarda en <id>_other).
+   exclusive: códigos que, al marcarse, desmarcan los demás (multi).
+   showIf: función sobre las respuestas; si devuelve false, la pregunta se oculta y no se envía. */
+const SECTIONS = [
+  {
+    id: 'business', title: 'Tu negocio',
+    intro: 'Empecemos por conocer el tamaño y la forma de tu operación.',
+    questions: [
+      { id: 'countries', type: 'multi', cols: true, other: true,
+        label: '¿En qué países opera tu negocio?', hint: 'Donde cobras o pagas remesas. Marca todos los que apliquen.',
+        options: [['venezuela','Venezuela'],['colombia','Colombia'],['peru','Perú'],['chile','Chile'],['ecuador','Ecuador'],['argentina','Argentina'],['panama','Panamá'],['mexico','México'],['usa','Estados Unidos'],['spain','España']] },
+      { id: 'years_operating', type: 'single',
+        label: '¿Cuánto tiempo llevas en el negocio de remesas?',
+        options: [['lt1','Menos de 1 año'],['1_2','1 a 2 años'],['3_5','3 a 5 años'],['gt5','Más de 5 años']] },
+      { id: 'remittances_per_day', type: 'single', cols: true,
+        label: 'En un día normal, ¿cuántas remesas procesas?',
+        options: [['lt10','Menos de 10'],['10_29','10 a 29'],['30_59','30 a 59'],['60_149','60 a 149'],['150_299','150 a 299'],['300plus','300 o más']] },
+      { id: 'operators_count', type: 'single', cols: true,
+        label: '¿Cuántos operadores pagan remesas por ti?', hint: 'Personas que pagan al destino desde sus propias cuentas.',
+        options: [['none','Ninguno, pago yo'],['1_2','1 a 2'],['3_5','3 a 5'],['6_10','6 a 10'],['11_20','11 a 20'],['21plus','Más de 20']] },
+      { id: 'operators_relationship', type: 'multi', other: true,
+        showIf: a => a.operators_count && a.operators_count !== 'none',
+        label: '¿Qué relación tienes con tus operadores?', hint: 'Marca todas las que apliquen.',
+        options: [['employees','Son empleados'],['partners','Son socios'],['family','Son familiares o amigos'],['third_parties','Son terceros o aliados independientes']] },
+      { id: 'operators_pay', type: 'single', other: true,
+        showIf: a => a.operators_count && a.operators_count !== 'none',
+        label: '¿Cómo les pagas a tus operadores?',
+        options: [['per_operation','Un monto por cada remesa pagada'],['fixed','Un monto fijo (semanal, quincenal o mensual)'],['mix','Una mezcla de fijo y por remesa'],['percentage','Un porcentaje de la ganancia o del monto'],['profit_share','Reparten ganancias (son socios)'],['unpaid','No les pago']] }
+    ]
+  },
+  {
+    id: 'routes', title: 'Rutas y métodos',
+    intro: 'Cómo te pagan tus clientes y cómo llega el dinero al destino.',
+    questions: [
+      { id: 'collection_methods', type: 'multi', cols: true, other: true,
+        label: '¿Por qué medios te pagan tus clientes?', hint: 'Marca todos los que uses.',
+        options: [['zelle','Zelle'],['usdt_binance','USDT / Binance'],['paypal','PayPal'],['zinli','Zinli'],['wise','Wise'],['bank_us','Banco en EE. UU.'],['bank_co','Banco en Colombia (Nequi, Bancolombia…)'],['bank_pe','Banco en Perú (Yape, Plin, BCP…)'],['bank_cl','Banco en Chile'],['bank_es','Banco en España / Bizum'],['bank_ve','Banco en Venezuela / pago móvil'],['cash','Efectivo']] },
+      { id: 'destination_countries', type: 'multi', cols: true, other: true,
+        label: '¿A qué países envías remesas?',
+        options: [['venezuela','Venezuela'],['colombia','Colombia'],['peru','Perú'],['chile','Chile'],['ecuador','Ecuador'],['argentina','Argentina']] },
+      { id: 'payout_methods', type: 'multi', cols: true, other: true,
+        label: '¿Cómo se paga en el destino?',
+        options: [['pago_movil','Pago móvil'],['bank_transfer_ve','Transferencia bancaria en Venezuela'],['bank_transfer_other','Transferencia bancaria en otro país'],['usdt','USDT / cripto'],['zelle','Zelle'],['zinli','Zinli'],['cash_delivery','Efectivo (entrega o retiro)']] },
+      { id: 'top_corridor', type: 'single', other: true,
+        label: '¿Cuál ruta te mueve más dinero?', hint: 'Elige solo una.',
+        options: [['usd_zelle_ves','Zelle (USD) → Venezuela (bolívares)'],['usdt_ves','USDT → Venezuela (bolívares)'],['cop_ves','Colombia (pesos) → Venezuela'],['pen_ves','Perú (soles) → Venezuela'],['clp_ves','Chile (pesos) → Venezuela'],['eur_ves','España (euros) → Venezuela'],['usd_cop','Dólares → Colombia'],['ves_abroad','Venezuela → exterior']] },
+      { id: 'collection_accounts', type: 'single', cols: true,
+        label: 'Sumando las tuyas y las de tus operadores, ¿cuántas cuentas manejas para cobrar y pagar?',
+        options: [['1_3','1 a 3'],['4_10','4 a 10'],['11_20','11 a 20'],['21_40','21 a 40'],['41plus','Más de 40']] }
+    ]
+  },
+  {
+    id: 'today', title: 'Cómo trabajas hoy',
+    intro: 'Tu día a día: herramientas, verificación, tasa y comisiones.',
+    questions: [
+      { id: 'current_tools', type: 'multi', cols: true, other: true,
+        label: '¿Qué usas hoy para manejar el negocio?', hint: 'Marca todo lo que uses.',
+        options: [['whatsapp','WhatsApp'],['whatsapp_business','WhatsApp Business'],['telegram','Telegram'],['excel','Excel'],['google_sheets','Google Sheets'],['notes_paper','Cuaderno o notas'],['own_software','Un sistema propio'],['third_party_software','Un sistema de otra empresa']] },
+      { id: 'payment_verification', type: 'multi', other: true,
+        label: '¿Cómo confirmas que el pago de un cliente llegó?', hint: 'Marca todas las que apliquen.',
+        options: [['check_account','Reviso la cuenta o la app del banco / Binance'],['bank_alerts','Me llegan notificaciones o correos del banco'],['trust_screenshot','Confío en la captura que manda el cliente'],['someone_else','Lo revisa otra persona (socio o empleado)']] },
+      { id: 'verification_time', type: 'single', cols: true,
+        label: 'En promedio, ¿cuánto tardas en confirmar un pago?',
+        options: [['lt2m','Menos de 2 min'],['2_5m','2 a 5 min'],['5_15m','5 a 15 min'],['15_60m','15 a 60 min'],['gt1h','Más de 1 hora']] },
+      { id: 'rate_source', type: 'multi', other: true,
+        label: '¿En qué te basas para fijar tu tasa?', hint: 'Marca todas las que apliquen.',
+        options: [['binance_p2p','Binance P2P u otro mercado P2P'],['official_rate','Tasa oficial (BCV u otro banco central)'],['rate_sites','Páginas o grupos que publican la tasa'],['competitors','Lo que cobra la competencia'],['own_cost','Mi costo real de conseguir la moneda']] },
+      { id: 'rate_changes_per_day', type: 'single', cols: true,
+        label: '¿Cuántas veces cambias tu tasa al día?',
+        options: [['lt1','Menos de una vez al día'],['1','1 vez'],['2_3','2 a 3 veces'],['4_6','4 a 6 veces'],['7plus','7 o más veces']] },
+      { id: 'fees_charged', type: 'multi', other: true, exclusive: ['none'],
+        label: '¿Cobras comisiones o das descuentos aparte de la tasa?', hint: 'Marca todas las que apliquen.',
+        options: [['none','No, mi ganancia está solo en la tasa'],['fixed_fee','Comisión fija por envío'],['percentage','Comisión en porcentaje'],['by_amount','Cambia según el monto'],['by_method','Cambia según el método de pago o de destino'],['frequent_discount','Descuento a clientes frecuentes'],['promo','Promociones u ofertas puntuales']] },
+      { id: 'assignment_method', type: 'single', other: true,
+        showIf: a => a.operators_count && a.operators_count !== 'none',
+        label: '¿Cómo repartes las remesas entre tus operadores?',
+        options: [['self','Las pago yo mismo'],['group','Las mando a un grupo y alguien las toma'],['by_balance','Se las asigno a quien tenga saldo'],['by_bank','Según el banco o método de destino'],['rotation','Por turnos, rotando'],['fixed_operator','Cada cliente tiene su operador']] }
+    ]
+  },
+  {
+    id: 'problems', title: 'Problemas',
+    intro: 'Queremos saber qué te duele más para resolverlo primero.',
+    questions: [
+      { id: 'pain_ratings', type: 'matrix', ends: SCALE_LABELS_PAIN,
+        label: '¿Cuánto te afecta cada uno de estos problemas?', hint: '1 = nada, 5 = muchísimo.',
+        items: [['daily_closing','Hacer el cierre del día a mano'],['reports_profit','Saber cuánto gané y sacar reportes'],['assignment','Repartir las remesas entre operadores'],['client_typos','Clientes que escriben mal los datos de destino'],['unpayable','Remesas que no se pueden pagar por datos inválidos'],['many_accounts','Demasiadas cuentas y métodos de pago'],['who_did_what','Saber quién hizo qué y cuándo']] },
+      { id: 'invalid_data_rate', type: 'single', cols: true,
+        label: 'De cada 100 remesas, ¿cuántas llegan con datos de destino mal escritos o inválidos?',
+        options: [['0','Ninguna'],['1_2','1 o 2'],['3_5','3 a 5'],['6_10','6 a 10'],['gt10','Más de 10']] },
+      { id: 'invalid_data_fix_time', type: 'single', cols: true,
+        showIf: a => a.invalid_data_rate && a.invalid_data_rate !== '0',
+        label: 'Cuando pasa, ¿cuánto tarda normalmente en resolverse?', hint: 'Desde que notas el error hasta que el cliente corrige.',
+        options: [['lt15m','Menos de 15 min'],['15_60m','15 a 60 min'],['1_4h','1 a 4 horas'],['same_day','El mismo día'],['next_day','Al día siguiente o más']] },
+      { id: 'late_fee', type: 'single',
+        label: 'Si el cliente tarda mucho en corregir sus datos, ¿le cobras un recargo?',
+        options: [['yes','Sí, siempre'],['sometimes','A veces'],['no','No'],['would_like','No, pero me gustaría']] },
+      { id: 'late_fee_amount', type: 'single', other: true,
+        showIf: a => a.late_fee === 'yes' || a.late_fee === 'sometimes',
+        label: '¿Cuánto cobras de recargo?',
+        options: [['lt1usd','Menos de US$1'],['1_3usd','US$1 a 3'],['3_5usd','US$3 a 5'],['gt5usd','Más de US$5'],['percentage','Un porcentaje del envío'],['rate_change','Le recalculo con la tasa del momento']] },
+      { id: 'biggest_time_sink', type: 'textarea', optional: true, max: 600,
+        label: 'Cuéntanos: ¿qué es lo que más tiempo te quita en el día?' }
+    ]
+  },
+  {
+    id: 'closing', title: 'Cierre y control',
+    intro: 'Cómo cuadras el día y controlas el dinero de cada cuenta.',
+    questions: [
+      { id: 'daily_closing', type: 'single',
+        label: '¿Haces un cierre o cuadre de caja?',
+        options: [['daily','Sí, todos los días'],['sometimes','Algunos días'],['weekly','Una vez por semana'],['monthly','Una vez al mes'],['no','No hago cierre']] },
+      { id: 'closing_time', type: 'single', cols: true,
+        showIf: a => a.daily_closing && a.daily_closing !== 'no',
+        label: '¿Cuánto tiempo te toma cada cierre?',
+        options: [['lt15m','Menos de 15 min'],['15_30m','15 a 30 min'],['30_60m','30 a 60 min'],['1_2h','1 a 2 horas'],['gt2h','Más de 2 horas']] },
+      { id: 'closing_mismatch', type: 'single',
+        showIf: a => a.daily_closing && a.daily_closing !== 'no',
+        label: '¿Con qué frecuencia los números no cuadran?',
+        options: [['never','Nunca'],['rarely','Rara vez'],['weekly','Una o dos veces por semana'],['often','Casi todos los días']] },
+      { id: 'operator_balance_control', type: 'single', other: true,
+        label: '¿Cómo sabes cuánto dinero tiene cada operador o cuenta en este momento?',
+        options: [['spreadsheet','Lo llevo en Excel o Sheets'],['ask','Les pregunto o me mandan capturas'],['app','Con un sistema'],['memory','De memoria o en notas'],['dont_know','No lo sé con exactitud']] },
+      { id: 'knows_profit', type: 'single',
+        label: '¿Sabes cuánto ganaste realmente en el día (descontando costos y comisiones bancarias)?',
+        options: [['exact','Sí, con exactitud'],['approx','Más o menos'],['no','No']] }
+    ]
+  },
+  {
+    id: 'interest', title: 'Lo que te serviría',
+    intro: 'Estas son ideas para Remsa. Dinos cuánto te servirían.',
+    questions: [
+      { id: 'feature_interest', type: 'matrix', ends: SCALE_LABELS_INTEREST,
+        label: '¿Cuánto te interesa cada función?', hint: '1 = no me interesa, 5 = lo necesito.',
+        items: [['client_portal','Página donde tu cliente cotiza y reporta su pago'],['auto_assignment','Reparto automático de remesas a tus operadores'],['operator_panel','Panel para que cada operador vea y pague sus remesas'],['correction_flow','Aviso al cliente para corregir datos inválidos'],['auto_closing','Cierre del día automático'],['profit_reports','Reportes de ganancias por día, ruta y operador'],['audit_log','Registro de quién hizo qué y cuándo'],['own_branding','Tu logo y tus colores en lo que ven tus clientes']] },
+      { id: 'top_feature', type: 'single',
+        label: 'Si solo pudieras tener una, ¿cuál elegirías?',
+        options: [['client_portal','Página para que el cliente cotice y reporte su pago'],['auto_assignment','Reparto automático a operadores'],['operator_panel','Panel del operador'],['correction_flow','Corrección de datos inválidos'],['auto_closing','Cierre del día automático'],['profit_reports','Reportes de ganancias'],['audit_log','Registro de quién hizo qué'],['own_branding','Tu logo y tus colores']] },
+      { id: 'clients_web_app', type: 'single',
+        label: '¿Crees que tus clientes usarían una página web para cotizar y enviar sus datos en lugar de escribir por WhatsApp?',
+        options: [['most','Sí, la mayoría'],['some','Algunos sí'],['few','Pocos'],['no','No, prefieren WhatsApp'],['unsure','No estoy seguro']] },
+      { id: 'adoption_concerns', type: 'multi', other: true, exclusive: ['none'],
+        label: '¿Qué te frenaría para usar un sistema así?', hint: 'Marca todas las que apliquen.',
+        options: [['price','El precio'],['learning','El tiempo para aprenderlo'],['clients_wont_use','Que mis clientes no lo usen'],['operators_wont_use','Que mis operadores no lo usen'],['data_privacy','Confiar mis datos a otra empresa'],['connectivity','Fallas de internet o de luz'],['none','Nada, lo usaría']] }
+    ]
+  },
+  {
+    id: 'pricing', title: 'Precio',
+    intro: 'Remsa se pagaría con una suscripción mensual, nunca con un porcentaje de tus envíos.',
+    questions: [
+      { id: 'willingness_to_pay', type: 'single', cols: true,
+        label: 'Si Remsa te resolviera los problemas que marcaste, ¿cuánto pagarías al mes?',
+        options: [['wouldnt_pay','No pagaría'],['lt20','Menos de US$20'],['20_39','US$20 a 39'],['40_79','US$40 a 79'],['80_149','US$80 a 149'],['150plus','US$150 o más']] },
+      { id: 'subscription_payment_methods', type: 'multi', cols: true, other: true,
+        label: '¿Cómo preferirías pagar la suscripción?', hint: 'Marca todas las que te sirvan.',
+        options: [['usdt','USDT'],['zelle','Zelle'],['paypal','PayPal'],['zinli','Zinli'],['bank_transfer','Transferencia bancaria'],['card','Tarjeta de crédito o débito']] },
+      { id: 'branding_extra', type: 'single',
+        label: '¿Pagarías algo extra para que tus clientes vean tu logo, tus colores y tu nombre en lugar del de Remsa?',
+        options: [['yes','Sí'],['maybe','Tal vez'],['no','No']] },
+      { id: 'branding_extra_amount', type: 'single', cols: true,
+        showIf: a => a.branding_extra === 'yes' || a.branding_extra === 'maybe',
+        label: '¿Cuánto extra al mes te parecería razonable?',
+        options: [['lt10','Menos de US$10'],['10_19','US$10 a 19'],['20_39','US$20 a 39'],['40plus','US$40 o más']] }
+    ]
+  },
+  {
+    id: 'final', title: 'Para terminar',
+    intro: 'Último paso. Todo aquí es opcional.',
+    questions: [
+      { id: 'comments', type: 'textarea', optional: true, max: 1000,
+        label: '¿Algo más que quieras contarnos?', hint: 'Ideas, problemas, lo que sea.' },
+      { id: 'wants_contact', type: 'single', optional: true,
+        label: '¿Te gustaría probar Remsa antes que nadie o conversar 15 minutos con nosotros?',
+        options: [['yes','Sí, me interesa'],['no','No, gracias']] },
+      { id: 'contact', type: 'text', optional: true, max: 120, inputmode: 'email',
+        showIf: a => a.wants_contact === 'yes',
+        label: 'Déjanos tu WhatsApp o correo',
+        hint: 'Opcional. Solo lo usaremos para invitarte a probar o a conversar. Si no lo dejas, tu respuesta sigue siendo anónima.' }
+    ]
+  }
+];
+
+/* ===== Estado ===== */
+let answers = {};
+let step = 0;          // índice de sección
+let submitting = false;
+let submitted = false;
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+/* ===== Persistencia local ===== */
+function saveLocal() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, step })); } catch (e) { /* sin almacenamiento */ }
+}
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data && typeof data.answers === 'object' && data.answers) {
+      answers = data.answers;
+      step = Math.min(Math.max(parseInt(data.step, 10) || 0, 0), SECTIONS.length - 1);
+      return Object.keys(answers).length > 0;
+    }
+  } catch (e) { /* ignorar */ }
+  return false;
+}
+function clearLocal() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignorar */ }
+}
+
+/* ===== Renderizado ===== */
+function el(tag, attrs = {}, children = []) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v === undefined || v === null || v === false) continue;
+    if (k === 'class') n.className = v;
+    else if (k === 'text') n.textContent = v;
+    else if (k === 'html') n.innerHTML = v;
+    else n.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of [].concat(children)) if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  return n;
+}
+
+function optionNode(type, name, value, label, checked) {
+  const input = el('input', { type, name, value });
+  input.checked = !!checked;
+  return el('label', { class: 'opt' }, [input, el('span', { class: 'mark', 'aria-hidden': 'true' }), el('span', { class: 'ol', text: label })]);
+}
+
+function renderQuestion(q, num) {
+  const isGroup = q.type === 'single' || q.type === 'multi' || q.type === 'scale' || q.type === 'matrix';
+  const wrap = el(isGroup ? 'fieldset' : 'div', { class: 'q', 'data-qid': q.id, id: 'q-' + q.id });
+  const titleId = 'q-' + q.id + '-label';
+  const hintId = q.hint ? 'q-' + q.id + '-hint' : null;
+  const errId = 'q-' + q.id + '-err';
+  const labelChildren = [q.label];
+  if (q.optional) labelChildren.push(el('span', { class: 'opt-tag', text: '(opcional)' }));
+
+  if (isGroup) {
+    wrap.appendChild(el('legend', { id: titleId }, labelChildren));
+    wrap.setAttribute('aria-describedby', [hintId, errId].filter(Boolean).join(' '));
+  } else {
+    wrap.appendChild(el('label', { class: 'qlabel', id: titleId, for: 'in-' + q.id }, labelChildren));
+  }
+  if (q.hint) wrap.appendChild(el('p', { class: 'hint', id: hintId, text: q.hint }));
+
+  if (q.type === 'single' || q.type === 'multi') {
+    const type = q.type === 'single' ? 'radio' : 'checkbox';
+    const box = el('div', { class: 'options' + (q.cols ? ' cols' : '') });
+    const cur = answers[q.id];
+    for (const [code, text] of q.options) {
+      const checked = type === 'radio' ? cur === code : Array.isArray(cur) && cur.includes(code);
+      box.appendChild(optionNode(type, q.id, code, text, checked));
+    }
+    if (q.other) {
+      const checked = type === 'radio' ? cur === 'other' : Array.isArray(cur) && cur.includes('other');
+      box.appendChild(optionNode(type, q.id, 'other', 'Otro', checked));
+    }
+    wrap.appendChild(box);
+    if (q.other) {
+      const oi = el('input', { type: 'text', class: 'other-input', id: 'in-' + q.id + '-other', 'data-other-for': q.id, maxlength: '120', placeholder: '¿Cuál?', 'aria-label': 'Especifica otro' });
+      oi.value = answers[q.id + '_other'] || '';
+      wrap.appendChild(oi);
+    }
+  } else if (q.type === 'matrix') {
+    const cur = answers[q.id] || {};
+    for (const [code, text] of q.items) {
+      const name = q.id + '__' + code;
+      const mid = 'm-' + name;
+      const item = el('div', { class: 'matrix-item', role: 'radiogroup', 'aria-labelledby': mid, 'data-item': code });
+      item.appendChild(el('p', { class: 'mlabel', id: mid, text: text }));
+      const sc = el('div', { class: 'scale' });
+      for (let v = 1; v <= 5; v++) {
+        const input = el('input', { type: 'radio', name, value: String(v), 'aria-label': text + ': ' + v + ' de 5' });
+        input.checked = cur[code] === v;
+        sc.appendChild(el('label', { class: 'opt' }, [input, el('span', { class: 'mark', 'aria-hidden': 'true' }), el('span', { class: 'ol', text: String(v), 'aria-hidden': 'true' })]));
+      }
+      item.appendChild(sc);
+      item.appendChild(el('div', { class: 'scale-ends', 'aria-hidden': 'true' }, [el('span', { text: '1 · ' + q.ends[0] }), el('span', { text: q.ends[1] + ' · 5' })]));
+      wrap.appendChild(item);
+    }
+  } else if (q.type === 'text' || q.type === 'textarea') {
+    const attrs = { id: 'in-' + q.id, name: q.id, maxlength: String(q.max || 300), 'aria-describedby': [hintId, errId].filter(Boolean).join(' ') };
+    let input;
+    if (q.type === 'text') {
+      input = el('input', Object.assign(attrs, { type: 'text', inputmode: q.inputmode === 'email' ? 'email' : 'text', autocomplete: 'off', placeholder: 'Ej.: +58 412 000 0000 o tu@correo.com' }));
+    } else {
+      input = el('textarea', Object.assign(attrs, { rows: '4', placeholder: 'Escribe aquí…' }));
+    }
+    input.value = answers[q.id] || '';
+    wrap.appendChild(input);
+    if (q.type === 'textarea') wrap.appendChild(el('div', { class: 'count', 'data-count-for': q.id, 'aria-hidden': 'true', text: (input.value.length) + ' / ' + (q.max || 300) }));
+  }
+  wrap.appendChild(el('div', { class: 'err', id: errId, role: 'alert', 'aria-live': 'polite' }));
+  return wrap;
+}
+
+function renderSteps() {
+  const host = $('#steps');
+  host.innerHTML = '';
+  let n = 0;
+  SECTIONS.forEach((s, i) => {
+    const sec = el('section', { class: 'card step', id: 'step-' + s.id, 'data-step': String(i), 'aria-labelledby': 'step-title-' + s.id, hidden: true });
+    sec.appendChild(el('h2', { id: 'step-title-' + s.id, tabindex: '-1', text: s.title }));
+    sec.appendChild(el('p', { class: 'step-intro', text: s.intro }));
+    sec.appendChild(el('div', { class: 'step-error', role: 'alert' }));
+    s.questions.forEach(q => { n++; sec.appendChild(renderQuestion(q, n)); });
+    const nav = el('div', { class: 'nav' });
+    nav.appendChild(el('button', { type: 'button', class: 'btn btn-ghost', 'data-action': 'back', text: i === 0 ? 'Inicio' : 'Atrás' }));
+    const isLast = i === SECTIONS.length - 1;
+    nav.appendChild(el('button', { type: 'button', class: 'btn btn-primary', 'data-action': isLast ? 'submit' : 'next', text: isLast ? 'Enviar respuestas' : 'Siguiente' }));
+    sec.appendChild(nav);
+    if (isLast) sec.appendChild(el('div', { class: 'submit-status', 'aria-live': 'polite' }));
+    host.appendChild(sec);
+  });
+}
+
+/* ===== Lógica ===== */
+function allQuestions() { return SECTIONS.flatMap(s => s.questions); }
+function findQuestion(id) { return allQuestions().find(q => q.id === id); }
+function isVisible(q) { try { return !q.showIf || !!q.showIf(answers); } catch (e) { return true; } }
+
+function updateVisibility() {
+  for (const q of allQuestions()) {
+    const node = document.getElementById('q-' + q.id);
+    if (node) node.hidden = !isVisible(q);
+    if (q.other) {
+      const oi = document.getElementById('in-' + q.id + '-other');
+      const cur = answers[q.id];
+      const on = q.type === 'single' ? cur === 'other' : Array.isArray(cur) && cur.includes('other');
+      if (oi) oi.hidden = !on;
+    }
+  }
+}
+
+function readInput(target) {
+  // Texto "Otro"
+  if (target.dataset.otherFor) {
+    answers[target.dataset.otherFor + '_other'] = target.value;
+    return target.dataset.otherFor;
+  }
+  const name = target.name;
+  if (!name || name === 'website') return null;
+  if (name.includes('__')) {
+    const [qid, item] = name.split('__');
+    answers[qid] = Object.assign({}, answers[qid], { [item]: parseInt(target.value, 10) });
+    return qid;
+  }
+  const q = findQuestion(name);
+  if (!q) return null;
+  if (q.type === 'single') {
+    answers[q.id] = target.value;
+  } else if (q.type === 'multi') {
+    let cur = Array.isArray(answers[q.id]) ? answers[q.id].slice() : [];
+    const code = target.value;
+    if (target.checked) {
+      const ex = q.exclusive || [];
+      if (ex.includes(code)) cur = [code];
+      else cur = cur.filter(c => !ex.includes(c));
+      if (!cur.includes(code)) cur.push(code);
+    } else {
+      cur = cur.filter(c => c !== code);
+    }
+    answers[q.id] = cur;
+    // Sincroniza las casillas por si se desmarcó alguna exclusiva
+    $$('input[name="' + q.id + '"]').forEach(i => { i.checked = cur.includes(i.value); });
+  } else {
+    answers[q.id] = target.value;
+    const c = document.querySelector('[data-count-for="' + q.id + '"]');
+    if (c) c.textContent = target.value.length + ' / ' + (q.max || 300);
+  }
+  return q.id;
+}
+
+function questionError(q) {
+  const v = answers[q.id];
+  if (q.type === 'single') {
+    if (!v) return q.optional ? '' : 'Elige una opción.';
+  } else if (q.type === 'multi') {
+    if (!Array.isArray(v) || v.length === 0) return q.optional ? '' : 'Marca al menos una opción.';
+  } else if (q.type === 'matrix') {
+    const got = v || {};
+    const missing = q.items.filter(([code]) => !got[code]);
+    if (missing.length) return missing.length === 1 ? 'Te falta calificar 1 opción.' : 'Te faltan calificar ' + missing.length + ' opciones.';
+  } else if (q.type === 'text' || q.type === 'textarea') {
+    if (!q.optional && !(v || '').trim()) return 'Escribe tu respuesta.';
+    if (q.id === 'contact' && (v || '').trim() && !/^(\+?[\d\s().-]{7,20}|[^\s@]+@[^\s@]+\.[^\s@]{2,})$/.test(v.trim())) {
+      return 'Escribe un número de WhatsApp o un correo válido, o déjalo en blanco.';
+    }
+  }
+  if (q.other) {
+    const on = q.type === 'single' ? v === 'other' : Array.isArray(v) && v.includes('other');
+    if (on && !(answers[q.id + '_other'] || '').trim()) return 'Cuéntanos cuál es la opción "Otro".';
+  }
+  return '';
+}
+
+function showQuestionError(q, msg) {
+  const node = document.getElementById('q-' + q.id);
+  if (!node) return;
+  node.classList.toggle('invalid', !!msg);
+  $('.err', node).textContent = msg;
+  if (q.type === 'matrix') {
+    const got = answers[q.id] || {};
+    $$('.matrix-item', node).forEach(it => it.classList.toggle('invalid', !!msg && !got[it.dataset.item]));
+  }
+}
+
+function validateStep(i) {
+  let firstBad = null;
+  for (const q of SECTIONS[i].questions) {
+    if (!isVisible(q)) { showQuestionError(q, ''); continue; }
+    const msg = questionError(q);
+    showQuestionError(q, msg);
+    if (msg && !firstBad) firstBad = q;
+  }
+  const sec = document.querySelector('[data-step="' + i + '"]');
+  const box = $('.step-error', sec);
+  if (firstBad) {
+    box.textContent = 'Revisa las preguntas marcadas en rojo antes de continuar.';
+    box.classList.add('show');
+    const node = document.getElementById('q-' + firstBad.id);
+    node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const focusable = node.querySelector('input:not([hidden]),textarea');
+    if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), 300);
+    return false;
+  }
+  box.classList.remove('show');
+  return true;
+}
+
+function showView(id) {
+  ['view-welcome', 'survey', 'view-thanks'].forEach(v => { document.getElementById(v).hidden = v !== id; });
+  $('#progress').hidden = id !== 'survey';
+}
+
+function goToStep(i, focus = true) {
+  step = i;
+  $$('.step').forEach(s => { s.hidden = parseInt(s.dataset.step, 10) !== i; });
+  const pct = Math.round((i / SECTIONS.length) * 100);
+  $('#progress-fill').style.width = Math.max(pct, 4) + '%';
+  $('.bar').setAttribute('aria-valuenow', String(pct));
+  $('#progress-label').textContent = 'Paso ' + (i + 1) + ' de ' + SECTIONS.length;
+  $('#progress-title').textContent = SECTIONS[i].title;
+  saveLocal();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (focus) {
+    const h = document.getElementById('step-title-' + SECTIONS[i].id);
+    if (h) setTimeout(() => h.focus({ preventScroll: true }), 50);
+  }
+}
+
+/* ===== Envío ===== */
+function buildPayload() {
+  const out = {};
+  for (const q of allQuestions()) {
+    if (!isVisible(q)) continue;
+    const v = answers[q.id];
+    if (q.type === 'text' || q.type === 'textarea') {
+      const t = (v || '').trim();
+      if (t) out[q.id] = t.slice(0, q.max || 300);
+    } else if (q.type === 'multi') {
+      if (Array.isArray(v) && v.length) out[q.id] = v.slice();
+    } else if (q.type === 'matrix') {
+      if (v) out[q.id] = Object.assign({}, v);
+    } else if (v) {
+      out[q.id] = v;
+    }
+    if (q.other) {
+      const on = q.type === 'single' ? v === 'other' : Array.isArray(v) && v.includes('other');
+      const t = (answers[q.id + '_other'] || '').trim();
+      if (on && t) out[q.id + '_other'] = t.slice(0, 120);
+    }
+  }
+  return { survey_version: CONFIG.SURVEY_VERSION, answers: out };
+}
+
+function isConfigured() { return !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY && CONFIG.TABLE); }
+
+let lastPayload = null;
+
+async function sendPayload(payload) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const res = await fetch(CONFIG.SUPABASE_URL.replace(/\/+$/, '') + '/rest/v1/' + encodeURIComponent(CONFIG.TABLE), {
+      method: 'POST',
+      headers: {
+        'apikey': CONFIG.SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + CONFIG.SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal,
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer'
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function finish(offline) {
+  submitted = true;
+  clearLocal();
+  $('#offline-box').hidden = !offline;
+  showView('view-thanks');
+  window.scrollTo({ top: 0 });
+  setTimeout(() => $('#view-thanks').focus(), 50);
+}
+
+async function submit(btn) {
+  if (submitting || submitted) return;
+  if (!validateStep(step)) return;
+  const status = $('.submit-status');
+  status.innerHTML = '';
+
+  // Trampa para bots: si el campo oculto tiene algo, no se envía nada.
+  if ($('#hp-website').value) { finish(false); return; }
+
+  lastPayload = buildPayload();
+
+  if (!isConfigured()) {
+    console.warn('[Encuesta Remsa] CONFIG.SUPABASE_URL / SUPABASE_ANON_KEY vacíos: la respuesta no se envió. Se ofrece descarga en JSON.', lastPayload);
+    finish(true);
+    return;
+  }
+
+  submitting = true;
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+  try {
+    await sendPayload(lastPayload);
+    finish(false);
+  } catch (e) {
+    console.error('[Encuesta Remsa] Error al enviar:', e);
+    btn.disabled = false;
+    btn.textContent = 'Enviar respuestas';
+    const box = el('div', { class: 'notice err-box', role: 'alert' }, [
+      'No pudimos enviar tus respuestas. Revisa tu conexión e inténtalo de nuevo; no se perdió nada.'
+    ]);
+    const retry = el('button', { type: 'button', class: 'btn btn-primary btn-block', style: 'margin-top:10px', text: 'Reintentar envío' });
+    retry.addEventListener('click', () => { status.innerHTML = ''; submit(btn); });
+    status.appendChild(box);
+    status.appendChild(retry);
+    retry.focus();
+  } finally {
+    submitting = false;
+  }
+}
+
+function downloadJSON() {
+  const data = lastPayload || buildPayload();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: 'encuesta-remsa-respuestas.json' });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ===== Eventos ===== */
+function init() {
+  const resumed = loadLocal();
+  renderSteps();
+  updateVisibility();
+  if (resumed) {
+    $('#resume-note').hidden = false;
+    $('#btn-start').textContent = 'Continuar encuesta';
+  }
+
+  $('#btn-start').addEventListener('click', () => { showView('survey'); goToStep(step); });
+
+  const form = $('#survey');
+  const onChange = e => {
+    const qid = readInput(e.target);
+    if (!qid) return;
+    updateVisibility();
+    const q = findQuestion(qid);
+    const node = q && document.getElementById('q-' + qid);
+    if (node && node.classList.contains('invalid')) showQuestionError(q, questionError(q));
+    saveLocal();
+  };
+  form.addEventListener('change', onChange);
+  form.addEventListener('input', e => { if (e.target.matches('input[type=text],textarea')) onChange(e); });
+  form.addEventListener('submit', e => e.preventDefault());
+  form.addEventListener('keydown', e => {
+    // Enter en un campo de texto de una línea avanza de paso
+    if (e.key === 'Enter' && e.target.matches('input[type=text]')) {
+      e.preventDefault();
+      const btn = document.querySelector('[data-step="' + step + '"] [data-action="next"],[data-step="' + step + '"] [data-action="submit"]');
+      if (btn) btn.click();
+    }
+  });
+  form.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const a = btn.dataset.action;
+    if (a === 'back') {
+      if (step === 0) { showView('view-welcome'); saveLocal(); }
+      else goToStep(step - 1);
+    } else if (a === 'next') {
+      if (validateStep(step)) goToStep(step + 1);
+    } else if (a === 'submit') {
+      submit(btn);
+    }
+  });
+  $('#btn-download').addEventListener('click', downloadJSON);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
